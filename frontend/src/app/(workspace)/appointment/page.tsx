@@ -1,18 +1,10 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import "./appointment.css";
+import Modal from "@/componenets/Modal/Modal";
 
 const page: React.FC = () => {
-  const appointmentDetails = [
-    {
-      id: "1",
-      client_id: "3515",
-      name: "Anurag Dubey",
-      time: "17:00",
-      date: "01-01-2026",
-      description: "This meeting is related to property dispute",
-    },
-  ];
-
+  const [openModal, setOpenModal] = useState(false);
   return (
     <main className="appointment-container">
       <section className="appointemt-details">
@@ -20,9 +12,12 @@ const page: React.FC = () => {
 
         <div className="appointment-button">
           <button>Client Detail</button>
-          <button>+ Add Appointment</button>
+          <button onClick={() => setOpenModal(true)}>+ Add Appointment</button>
         </div>
       </section>
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <h1>modal</h1>
+      </Modal>
 
       <section className="upcomings-appointment">upcomings</section>
     </main>
