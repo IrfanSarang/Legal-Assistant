@@ -1,17 +1,27 @@
 "use client";
+
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import "./appointment.css";
 import Modal from "@/componenets/Modal/Modal";
 
 const page: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
+  const router = useRouter();
   return (
     <main className="appointment-container">
       <section className="appointemt-details">
         <h1>Appointment Details </h1>
 
         <div className="appointment-button">
-          <button>Client Detail</button>
+          <button
+            onClick={() => {
+              router.push("/clientDetails");
+            }}
+          >
+            Client Detail
+          </button>
           <button onClick={() => setOpenModal(true)}>+ Add Appointment</button>
         </div>
       </section>

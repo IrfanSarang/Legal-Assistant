@@ -1,0 +1,17 @@
+.client-form-container {
+  flex: 1;
+}
+
+.client-form-container h1 {
+  text-align: center;
+  font-size: 2rem;
+}
+.client-form {
+  padding: 1rem;
+  font-size: 1.5rem;
+}
+
+.add-client-button {
+  padding: 0.5rem 0.8rem;
+  font-size: 1.2rem;
+}

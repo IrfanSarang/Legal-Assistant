@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Sidebar from "@/componenets/Sidebar/Sidebar";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 export default function DashboardLayout({
   children,
@@ -10,7 +11,9 @@ export default function DashboardLayout({
   return (
     <div className="workspace">
       <Sidebar />
-      <main className="content">{children}</main>
+      <main className="content">
+        <ReactQueryProvider>{children}</ReactQueryProvider>
+      </main>
     </div>
   );
 }
