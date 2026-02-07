@@ -1,15 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.database.client_db import SessionLocal, engine, Base
-from app.models.client_model import Client
-from app.schemas import ClientCreate, Client as ClientSchema
+from app.core.database import SessionLocal
+from app.models.client import Client
+from app.schemas.client import  ClientCreate, ClientUpdate , ClientResponse
 
-# CREATE ROUTER
 router = APIRouter()
-
-# CREATE TABLES
-Base.metadata.create_all(bind=engine)
 
 # DATABASE DEPENDENCY
 def get_db():
@@ -20,7 +16,7 @@ def get_db():
         db.close()
 
 # ---------------- CREATE ----------------
-@router.post("/clients/", response_model=ClientSchema)
+@router.post("/", response_model=ClientResponse, status_code=201)
 def create_client(client: ClientCreate, db: Session = Depends(get_db)):
     db_client = Client(**client.dict())
     db.add(db_client)
@@ -29,12 +25,12 @@ def create_client(client: ClientCreate, db: Session = Depends(get_db)):
     return db_client
 
 # ---------------- READ ALL ----------------
-@router.get("/clients/", response_model=list[ClientSchema])
+@router.get("/", response_model=list[ClientResponse])
 def get_clients(db: Session = Depends(get_db)):
     return db.query(Client).all()
 
 # ---------------- READ ONE ----------------
-@router.get("/clients/{client_id}", response_model=ClientSchema)
+@router.get("/{client_id}", response_model=ClientResponse)
 def get_client(client_id: int, db: Session = Depends(get_db)):
     client = db.query(Client).filter(Client.id == client_id).first()
     if not client:
@@ -42,21 +38,22 @@ def get_client(client_id: int, db: Session = Depends(get_db)):
     return client
 
 # ---------------- UPDATE ----------------
-@router.put("/clients/{client_id}", response_model=ClientSchema)
-def update_client(client_id: int, updated: ClientCreate, db: Session = Depends(get_db)):
+@router.put("/{client_id}", response_model=ClientResponse)
+def update_client(client_id: int, updated: ClientUpdate, db: Session = Depends(get_db)):
     client = db.query(Client).filter(Client.id == client_id).first()
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
 
-    for key, value in updated.dict().items():
+    for key, value in updated.dict(exclude_unset=True).items():
         setattr(client, key, value)
+
 
     db.commit()
     db.refresh(client)
     return client
 
 # ---------------- DELETE ----------------
-@router.delete("/clients/{client_id}")
+@router.delete("/{client_id}")
 def delete_client(client_id: int, db: Session = Depends(get_db)):
     client = db.query(Client).filter(Client.id == client_id).first()
     if not client:
