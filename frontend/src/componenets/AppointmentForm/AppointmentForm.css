@@ -1,0 +1,18 @@
+.appointment-form-container {
+  padding: 0.25rem;
+}
+
+.appointment-form-container h1 {
+  font-size: 1.9rem;
+  text-align: center;
+}
+
+.appointment-form {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-form label {
+  font-size: 1.2rem;
+}

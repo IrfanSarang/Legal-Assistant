@@ -8,7 +8,7 @@
 
 /* Appointment details Styles */
 .appointemt-details {
-  width: 60%;
+  width: 90%;
   height: 100%;
   background-color: pink;
 }
@@ -40,4 +40,22 @@
   width: 30%;
   height: 100%;
   background-color: green;
+}
+
+/* appointment list styles */
+
+.appointment-list {
+  flex: 1;
+  padding: 1rem 1.5rem;
+}
+
+.appointment-list h2 {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.appointment-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

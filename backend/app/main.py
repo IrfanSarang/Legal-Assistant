@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from app.api.client import router as client_router
-from app.api.appointment import router as appointment_router
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.api.router import api_router
+from app.core.database import Base
+from app.core.database import engine
 
 
 def create_app() -> FastAPI:
@@ -14,8 +14,8 @@ def create_app() -> FastAPI:
 
  # ---------------- CORS ----------------
     origins = [
-        "http://localhost:3000",  # Next.js frontend dev
-        "http://192.168.0.102:3000",
+        "http://localhost:3000",  
+        "http://192.168.0.101:3000",
         "http://127.0.0.1:3000",
         # Add production frontend URLs here
     ]
@@ -28,9 +28,12 @@ def create_app() -> FastAPI:
         allow_headers=["*"],        # allow all headers
     )
 
-    # ---------------- Routers ----------------
-    app.include_router(client_router, prefix="/api")
-    app.include_router(appointment_router, prefix="/api")   
+
+    # CREATE TABLES
+    Base.metadata.create_all(bind=engine)
+
+  # ----------- API Router -----------
+    app.include_router(api_router)  
 
     return app
 
