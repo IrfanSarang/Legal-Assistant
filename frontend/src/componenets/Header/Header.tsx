@@ -13,7 +13,7 @@ const Header: React.FC = () => {
       {/* Navigation */}
       <nav>
         <Link href="/appointment">Appointment</Link>
-        <Link href="/">Consultation</Link>
+        <Link href="/legal">Legal Intelligence</Link>
         <Link href="/">Legal Research</Link>
         <Link href="/">Contract Analysis</Link>
         <Link href="/">Evidence Review</Link>

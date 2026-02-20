@@ -3,5 +3,9 @@ uvicorn
 sqlalchemy
 pydantic
 email-validator
-
+pypdf
+sentence_transformers
+faiss-cpu
+openai
+requests
 
