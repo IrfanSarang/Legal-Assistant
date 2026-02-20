@@ -34,9 +34,9 @@ const Sidebar: React.FC = () => {
           <span className="label">Appointment</span>
         </Link>
 
-        <Link href="/consultation" className="sidebar-link">
+        <Link href="/legal" className="sidebar-link">
           <span className="icon">💬</span>
-          <span className="label">Consultation</span>
+          <span className="label">Legal Intelligence</span>
         </Link>
 
         <Link href="/research" className="sidebar-link">
