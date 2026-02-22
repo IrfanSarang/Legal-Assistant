@@ -1,56 +1,62 @@
 "use client";
 
 import React, { useState } from "react";
-import "./Sidebar.css";
-import Image from "next/image";
 import Link from "next/link";
+import "./Sidebar.css";
 
 const Sidebar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
-    <aside className={`sidebar ${isOpen ? "open" : "close"}`}>
-      <section className="sidebar-header">
-        <Image
-          src="/SidebarLogo.png"
-          alt="User logo"
-          width={35}
-          height={35}
-          className={`${isOpen ? "show" : "hide"}`}
-        />
-        <h2 className={`sidebar-title ${isOpen ? "show" : "hide"} `}>
-          Irfan Sarang
-        </h2>
+    <aside className={`sidebar ${isOpen ? "open" : "closed"}`}>
+      <div className="sidebar-header">
+        {isOpen && <h2 className="sidebar-title">Features</h2>}
         <button
-          className={`${isOpen ? "sidebar-button-open" : "sidebar-button-close"}`}
+          className="toggle-btn"
           onClick={() => setIsOpen((prev) => !prev)}
+          aria-label="Toggle Sidebar"
         >
-          {`${isOpen ? "✕" : "☰"}`}
+          {isOpen ? "✕" : "☰"}
         </button>
-      </section>
+      </div>
 
       <nav className="sidebar-nav">
-        <Link href="/" className="sidebar-link">
-          <span className="icon">📅</span>
-          <span className="label">Home</span>
-        </Link>
-
-        <Link href="/appointment" className="sidebar-link">
-          <span className="icon">📅</span>
-          <span className="label">Appointment</span>
-        </Link>
-
-        <Link href="/legal" className="sidebar-link">
-          <span className="icon">💬</span>
-          <span className="label">Legal Intelligence</span>
-        </Link>
-
-        <Link href="/contract" className="sidebar-link">
-          <span className="icon">📄</span>
-          <span className="label">Contract Analysis</span>
-        </Link>
+        <SidebarItem href="/" icon="🏠" label="Home" isOpen={isOpen} />
+        <SidebarItem
+          href="/appointment"
+          icon="📅"
+          label="Appointment"
+          isOpen={isOpen}
+        />
+        <SidebarItem
+          href="/legal"
+          icon="⚖️"
+          label="Legal Intelligence"
+          isOpen={isOpen}
+        />
+        <SidebarItem
+          href="/contract"
+          icon="📄"
+          label="Contract Analysis"
+          isOpen={isOpen}
+        />
       </nav>
     </aside>
   );
 };
+
+interface ItemProps {
+  href: string;
+  icon: string;
+  label: string;
+  isOpen: boolean;
+}
+
+const SidebarItem = ({ href, icon, label, isOpen }: ItemProps) => (
+  <Link href={href} className="sidebar-link" title={!isOpen ? label : ""}>
+    <span className="icon">{icon}</span>
+    {isOpen && <span className="label">{label}</span>}
+  </Link>
+);
 
 export default Sidebar;

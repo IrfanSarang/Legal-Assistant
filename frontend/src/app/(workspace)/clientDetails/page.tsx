@@ -7,71 +7,71 @@ import { Client } from "@/types/client";
 import Modal from "@/componenets/Modal/Modal";
 import ClientForm from "@/componenets/ClientForm/ClientForm";
 
-const page: React.FC = () => {
+const ClientDetailsPage: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const deleteClient = useDeleteClient();
 
   const { data, isLoading, error } = useClients();
 
-  if (isLoading) return <p>Loading Clients...</p>;
-  if (error) return <p>Error loading Error...</p>;
+  if (isLoading) return <div className="status-msg">Loading Clients...</div>;
+  if (error)
+    return <div className="status-msg error">Error loading clients.</div>;
 
   const handleDelete = (id: number) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this Client? ",
-    );
-    if (!confirmDelete) return;
+    if (window.confirm("Are you sure you want to delete this client?")) {
+      deleteClient.mutate(id);
+    }
+  };
 
-    deleteClient.mutate(id);
+  const handleOpenAddModal = () => {
+    setSelectedClient(null);
+    setOpenModal(true);
+  };
+
+  const handleOpenEditModal = (client: Client) => {
+    setSelectedClient(client);
+    setOpenModal(true);
   };
 
   return (
     <main className="client-details-container">
-      <h2 className="client-details-header">Client Details</h2>
-      <section className="add-clients-container">
-        <button
-          className="add-clients"
-          onClick={() => {
-            setSelectedClient(null);
-            setOpenModal(true);
-          }}
-        >
-          + Add New Clients
+      <header className="client-header-section">
+        <div>
+          <h1>Client Directory</h1>
+          <p>Manage contact information for your legal cases</p>
+        </div>
+        <button className="add-clients-btn" onClick={handleOpenAddModal}>
+          + Add New Client
         </button>
+      </header>
 
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <ClientForm
-            initialData={selectedClient}
-            onClose={() => setOpenModal(false)}
-          />
-        </Modal>
-      </section>
-      <section className="details-container">
+      <section className="clients-grid">
         {data?.map((client: Client) => (
-          <div className="details-card" key={client.id}>
-            <h2 className="details-card-header">{client.name}</h2>
-
-            <div className="client-info">
-              <p>
-                <strong>Phone:</strong> {client.phone}
-              </p>
-              <p>
-                <strong>Email:</strong> {client.email}
-              </p>
+          <div className="client-card" key={client.id}>
+            <div className="client-card-header">
+              <div className="avatar">{client.name.charAt(0)}</div>
+              <h3>{client.name}</h3>
             </div>
 
-            <div className="details-card-actions">
+            <div className="client-card-body">
+              <div className="info-row">
+                <span className="icon">📞</span>
+                <span>{client.phone}</span>
+              </div>
+              <div className="info-row">
+                <span className="icon">✉️</span>
+                <span className="email-text">{client.email}</span>
+              </div>
+            </div>
+
+            <div className="client-card-footer">
               <button
                 className="update-btn"
-                onClick={() => {
-                  setSelectedClient(client);
-                  setOpenModal(true);
-                }}
+                onClick={() => handleOpenEditModal(client)}
               >
                 Update
               </button>
-
               <button
                 className="delete-btn"
                 onClick={() => handleDelete(client.id)}
@@ -82,8 +82,17 @@ const page: React.FC = () => {
           </div>
         ))}
       </section>
+
+      {data?.length === 0 && <p className="no-data">No clients found.</p>}
+
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <ClientForm
+          initialData={selectedClient}
+          onClose={() => setOpenModal(false)}
+        />
+      </Modal>
     </main>
   );
 };
 
-export default page;
+export default ClientDetailsPage;

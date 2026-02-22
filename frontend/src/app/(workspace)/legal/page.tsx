@@ -17,6 +17,7 @@ const LegalPage: React.FC = () => {
       <section className="legal-header">
         <h1>Legal Intelligence</h1>
         <p>RAG-based Analysis</p>
+        <p>(Focused on Criminal law Domain)</p>
       </section>
 
       <section className="legal-main">

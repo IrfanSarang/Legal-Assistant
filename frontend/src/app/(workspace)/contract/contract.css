@@ -1,35 +1,120 @@
 .contract-container {
-  width: 100%;
-  height: 100%;
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
 }
 
 .contract-header {
-  padding: 0.8rem 0.5rem;
-  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1rem;
 }
 
 .contract-header h1 {
-  font-size: 2.5rem;
-  padding: 0.8rem;
-}
-.contract-header p {
-  font-size: 1.2rem;
+  color: #166534;
+  margin: 0;
 }
 
-/* contract main styles */
+.contract-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
 
-.contract-main {
+/* Left Panel */
+.contract-input-panel {
   display: flex;
-  justify-content: space-around;
-  padding: 2rem;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.contract-main-1 {
-  width: 40%;
-  background-color: blanchedalmond;
+.contract-input-panel textarea {
+  width: 100%;
+  padding: 1.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  background: white;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
-.contract-main-2 {
-  width: 50%;
-  background-color: aqua;
+.analyze-btn {
+  background: #166534;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.analyze-btn:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+/* Right Panel */
+.contract-results-panel {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 500px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.analysis-card.primary {
+  border: 2px solid #22c55e;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #f0fdf4;
+}
+
+.analysis-card h2 {
+  color: #166534;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.analysis-text {
+  white-space: pre-wrap;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* Law Section Items */
+.law-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+  align-items: flex-start;
+}
+
+.law-item .check {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.law-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.empty-state {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  text-align: center;
 }

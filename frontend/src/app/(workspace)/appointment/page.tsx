@@ -10,97 +10,119 @@ import { useAppointments, useDeleteAppointment } from "@/hooks/useAppointment";
 import AppointmentUpdate from "@/componenets/AppointmentUpdate/AppointmentUpdate";
 import { Appointment } from "@/types/appointment";
 
-const page: React.FC = () => {
+const AppointmentPage: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const deleteAppointment = useDeleteAppointment();
   const [selectedAppointment, setSelectedAppointment] =
     useState<Appointment | null>(null);
+
   const router = useRouter();
   const { data, isLoading, isError } = useAppointments();
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-  if (isError) {
-    return <p>Error loading appointments.</p>;
-  }
+  const deleteAppointment = useDeleteAppointment();
+
+  if (isLoading)
+    return <div className="status-msg">Loading Appointments...</div>;
+  if (isError)
+    return <div className="status-msg error">Error loading data.</div>;
 
   const handleDelete = (id: number) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this appointment? ",
-    );
-    if (!confirmDelete) return;
-    deleteAppointment.mutate(id);
+    if (window.confirm("Are you sure you want to delete this appointment?")) {
+      deleteAppointment.mutate(id);
+    }
   };
 
   return (
-    <main className="appointment-container">
-      <section className="appointemt-details">
-        <h1>Appointment Details </h1>
-
-        <div className="appointment-button">
-          <button
-            onClick={() => {
-              router.push("/clientDetails");
-            }}
-          >
-            Client Detail
-          </button>
-          <button onClick={() => setOpenModal(true)}>+ Add Appointment</button>
+    <main className="appointment-page">
+      <header className="page-header">
+        <div>
+          <h1>Appointment Management</h1>
+          <p>Manage your client schedules and case meetings</p>
         </div>
+        <div className="header-actions">
+          <button
+            className="secondary-btn"
+            onClick={() => router.push("/clientDetails")}
+          >
+            View Clients
+          </button>
+          <button className="primary-btn" onClick={() => setOpenModal(true)}>
+            + Add Appointment
+          </button>
+        </div>
+      </header>
 
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <AppointmentForm onClose={() => setOpenModal(false)} />
-        </Modal>
-
-        <section className="appointment-list">
-          <h2>Appointments</h2>
-
-          {data?.length === 0 && <p>No appointments found</p>}
-
-          <div className="appointment-grid">
-            {data?.map((appt) => (
-              <div key={appt.id} className="appointment-card">
-                <h3>{appt.client.name}</h3>
-
-                <p>
-                  <b>Date:</b> {new Date(appt.date).toLocaleString()}
-                </p>
-                <p>
-                  <b>Phone:</b> {appt.client.phone}
-                </p>
-                <p>
-                  <b>Email:</b> {appt.client.email}
-                </p>
-
-                {appt.description && (
-                  <p>
-                    <b>Note:</b> {appt.description}
-                  </p>
-                )}
-
-                <button
-                  onClick={() => {
-                    setSelectedAppointment(appt);
-                    setOpenEditModal(true);
-                  }}
-                >
-                  Edit
-                </button>
-                <button onClick={() => handleDelete(appt.id)}>Delete</button>
-              </div>
-            ))}
-          </div>
-        </section>
-        <Modal open={openEditModal} onClose={() => setOpenEditModal(false)}>
-          <AppointmentUpdate
-            initialData={selectedAppointment}
-            onClose={() => setOpenEditModal(false)}
-          />
-        </Modal>
+      <section className="appointment-section">
+        <div className="table-container">
+          <table className="appointment-table">
+            <thead>
+              <tr>
+                <th>Client Name</th>
+                <th>Date </th>
+                <th>Contact Info</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map((appt) => (
+                <tr key={appt.id}>
+                  <td className="font-bold">{appt.client.name}</td>
+                  <td>
+                    {new Date(appt.date).toLocaleString([], {
+                      dateStyle: "medium",
+                    })}
+                  </td>
+                  <td>
+                    <div className="contact-cell">
+                      <span>{appt.client.phone}</span>
+                      <small>{appt.client.email}</small>
+                    </div>
+                  </td>
+                  <td className="description-cell">
+                    {appt.description || "—"}
+                  </td>
+                  <td>
+                    <div className="action-group">
+                      <button
+                        className="edit-btn"
+                        onClick={() => {
+                          setSelectedAppointment(appt);
+                          setOpenEditModal(true);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(appt.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {data?.length === 0 && (
+            <p className="no-data">No appointments scheduled.</p>
+          )}
+        </div>
       </section>
+
+      {/* Modals */}
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <AppointmentForm onClose={() => setOpenModal(false)} />
+      </Modal>
+
+      <Modal open={openEditModal} onClose={() => setOpenEditModal(false)}>
+        <AppointmentUpdate
+          initialData={selectedAppointment}
+          onClose={() => setOpenEditModal(false)}
+        />
+      </Modal>
     </main>
   );
 };
 
-export default page;
+export default AppointmentPage;

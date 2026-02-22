@@ -14,14 +14,18 @@ const Header: React.FC = () => {
       <nav>
         <Link href="/appointment">Appointment</Link>
         <Link href="/legal">Legal Intelligence</Link>
-        <Link href="/contract">Contract Analysis</Link>
+        <Link href="/contract">Clause Analysis</Link>
       </nav>
 
-      {/* Auth Buttons */}
-      <div className="auth-buttons">
-        <button>Log In</button>
-        <button>Sign Up</button>
-      </div>
+      {/*Github Button */}
+      <a
+        href="https://github.com/IrfanSarang/Legal-Assistant.git"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="github-btn"
+      >
+        Github
+      </a>
     </header>
   );
 };
