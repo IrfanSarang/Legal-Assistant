@@ -14,9 +14,7 @@ const Header: React.FC = () => {
       <nav>
         <Link href="/appointment">Appointment</Link>
         <Link href="/legal">Legal Intelligence</Link>
-        <Link href="/">Legal Research</Link>
-        <Link href="/">Contract Analysis</Link>
-        <Link href="/">Evidence Review</Link>
+        <Link href="/contract">Contract Analysis</Link>
       </nav>
 
       {/* Auth Buttons */}

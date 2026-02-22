@@ -29,6 +29,11 @@ const Sidebar: React.FC = () => {
       </section>
 
       <nav className="sidebar-nav">
+        <Link href="/" className="sidebar-link">
+          <span className="icon">📅</span>
+          <span className="label">Home</span>
+        </Link>
+
         <Link href="/appointment" className="sidebar-link">
           <span className="icon">📅</span>
           <span className="label">Appointment</span>
@@ -39,19 +44,9 @@ const Sidebar: React.FC = () => {
           <span className="label">Legal Intelligence</span>
         </Link>
 
-        <Link href="/research" className="sidebar-link">
-          <span className="icon">📚</span>
-          <span className="label">Legal Research</span>
-        </Link>
-
         <Link href="/contract" className="sidebar-link">
           <span className="icon">📄</span>
           <span className="label">Contract Analysis</span>
-        </Link>
-
-        <Link href="/evidence" className="sidebar-link">
-          <span className="icon">🧾</span>
-          <span className="label">Evidence Review</span>
         </Link>
       </nav>
     </aside>

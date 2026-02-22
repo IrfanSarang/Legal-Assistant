@@ -8,4 +8,8 @@ sentence_transformers
 faiss-cpu
 openai
 requests
+python-docx
+numpy
+pymupdf
+
 
