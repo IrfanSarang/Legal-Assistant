@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Appointment } from "@/types/appointment";
 import { useUpdateAppointment } from "@/hooks/useAppointment";
 
+import "./AppointmentUpdate.css";
 interface Props {
   initialData?: Appointment | null;
   onClose: () => void;
@@ -17,11 +18,8 @@ const AppointmentUpdate: React.FC<Props> = ({ initialData, onClose }) => {
 
   useEffect(() => {
     if (initialData) {
-      setDate(initialData.date.split("T")[0]);
-      setDescription(initialData.description);
-    } else {
-      setDate("");
-      setDescription("");
+      setDate(initialData.date ? initialData.date.split("T")[0] : "");
+      setDescription(initialData.description || "");
     }
   }, [initialData]);
 
@@ -36,35 +34,59 @@ const AppointmentUpdate: React.FC<Props> = ({ initialData, onClose }) => {
       },
       {
         onSuccess: () => onClose(),
-        onError: (err: any) => alert("Failed to update appointment"),
+        onError: () => alert("Failed to update appointment"),
       },
     );
   };
-  return (
-    <div className="appointment-update">
-      <h2>Update Appointment</h2>
 
-      <form onSubmit={handleSubmit}>
-        <label>
-          Date:
+  if (!initialData) return null;
+
+  return (
+    <div className="update-form-container">
+      <div className="update-header">
+        <h2>Refine Appointment</h2>
+        <p>
+          Updating schedule for: <strong>{initialData.client.name}</strong>
+        </p>
+      </div>
+
+      <form className="update-form" onSubmit={handleSubmit}>
+        <div className="input-group">
+          <label htmlFor="update-date">New Date</label>
           <input
+            id="update-date"
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
           />
-        </label>
+        </div>
 
-        <label>
-          Description:
+        <div className="input-group">
+          <label htmlFor="update-desc">Updated Description</label>
           <textarea
+            id="update-desc"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            placeholder="Add new notes..."
+            rows={4}
             required
           />
-        </label>
+        </div>
 
-        <button type="submit">Update</button>
+        <div className="update-actions">
+          <button type="button" className="cancel-btn" onClick={onClose}>
+            Discard
+          </button>
+          {/* Restored the Save Button */}
+          <button
+            type="submit"
+            className="save-btn"
+            disabled={updateAppointment.isPending}
+          >
+            {updateAppointment.isPending ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
       </form>
     </div>
   );

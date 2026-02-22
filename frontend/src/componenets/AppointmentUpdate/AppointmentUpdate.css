@@ -1,0 +1,123 @@
+/* Container for the update form within the Modal */
+.update-form-container {
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Header section with title and client name */
+.update-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+}
+
+.update-header h2 {
+  color: #166534; /* Theme Green */
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.update-header p {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.update-header strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Form Layout */
+.update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Input groups for labels and fields */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.input-group input,
+.input-group textarea {
+  padding: 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+/* Focus states to emphasize "Not a Wrapper" custom feel */
+.input-group input:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #166534;
+  box-shadow: 0 0 0 4px rgba(22, 101, 52, 0.1);
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Action Button Row */
+.update-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Secondary/Cancel Button */
+.cancel-btn {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #e5e7eb;
+}
+
+/* Primary/Save Button */
+.save-btn {
+  background-color: #166534;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+  background-color: #15803d;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.save-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

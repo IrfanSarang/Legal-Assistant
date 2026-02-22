@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import "./AppointmentForm.css";
-
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axiosInstance";
 import { Client } from "@/types/client";
 import { useCreateAppointment } from "@/hooks/useAppointment";
@@ -13,13 +12,12 @@ interface Props {
 }
 
 const AppointmentForm: React.FC<Props> = ({ onClose }) => {
-  const [clientId, setClientId] = React.useState("");
-  const [date, setDate] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [clientId, setClientId] = useState("");
+  const [date, setDate] = useState("");
+  const [description, setDescription] = useState("");
 
   const createAppointment = useCreateAppointment();
 
-  // Fetch clients
   const {
     data: clients,
     isLoading,
@@ -32,10 +30,8 @@ const AppointmentForm: React.FC<Props> = ({ onClose }) => {
     },
   });
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     createAppointment.mutate(
       {
         client_id: Number(clientId),
@@ -49,51 +45,78 @@ const AppointmentForm: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <main className="appointment-form-container">
-      <h1>Schedule Appointments</h1>
+    <div className="modal-overlay">
+      <main className="appointment-form-container">
+        <div className="form-header">
+          <h2>📅 Schedule Appointment</h2>
+          <button className="close-x" onClick={onClose}>
+            ✕
+          </button>
+        </div>
 
-      <form className="appointment-form" onSubmit={handleSubmit}>
-        <label>
-          Client Name:
-          <select
-            name="clientId"
-            onChange={(e) => setClientId(e.target.value)}
-            required
-          >
-            <option value="">Select Client</option>
-
-            {isLoading && <option>Loading...</option>}
-            {isError && <option>Error loading clients</option>}
-
-            {clients?.map((client) => (
-              <option key={client.id} value={client.id}>
-                {client.name}
+        <form className="appointment-form" onSubmit={handleSubmit}>
+          <div className="input-group">
+            <label htmlFor="client">Client Name</label>
+            <select
+              id="client"
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
+              required
+              disabled={isLoading}
+            >
+              <option value="">
+                {isLoading ? "Loading clients..." : "Select a Client"}
               </option>
-            ))}
-          </select>
-        </label>
+              {clients?.map((client) => (
+                <option key={client.id} value={client.id}>
+                  {client.name}
+                </option>
+              ))}
+            </select>
+            {isError && (
+              <span className="error-text">Failed to load clients.</span>
+            )}
+          </div>
 
-        <label>
-          Date:
-          <input
-            type="date"
-            name="date"
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </label>
+          <div className="input-group">
+            <label htmlFor="date">Appointment Date</label>
+            <input
+              id="date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+            />
+          </div>
 
-        <label>
-          Description:
-          <textarea
-            name="description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </label>
+          <div className="input-group">
+            <label htmlFor="desc">Description / Notes</label>
+            <textarea
+              id="desc"
+              placeholder="Case details, meeting agenda..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+            />
+          </div>
 
-        <button type="submit">Add</button>
-      </form>
-    </main>
+          <div className="form-actions">
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={createAppointment.isPending}
+            >
+              {createAppointment.isPending
+                ? "Scheduling..."
+                : "Confirm Schedule"}
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
   );
 };
 

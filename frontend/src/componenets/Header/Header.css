@@ -1,47 +1,157 @@
+/* ===================================== */
+/* 🌿 AI LEGAL ASSISTANT - HEADER STYLE */
+/* ===================================== */
+
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   width: 100%;
   height: 85px;
-  background-color: rgb(78, 158, 81);
-  padding: 1rem;
+  padding: 0 3rem;
+
+  /* Dark → Neon → Dark Gradient */
+  background:
+    linear-gradient(
+      90deg,
+      #000b00 0%,
+      #001a00 18%,
+      #003d14 35%,
+      #06883afb 50%,
+      #038135 60%,
+      #003d14 75%,
+      #000b00 100%
+    ),
+    /* Vertical light stripes */
+    repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1) 0px,
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 1px,
+        transparent 7px
+      );
+
+  background-blend-mode: overlay;
+
+  background-size:
+    100% 100%,
+    140px 100%;
+  animation: moveLines 5s linear infinite;
+
+  /* Neon glow */
 }
 
-/* logo name styles */
+/* ============================= */
+/* 🎬 Stripe Animation */
+/* ============================= */
+
+@keyframes moveLines {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0 0,
+      140px 0;
+  }
+}
+
+/* ============================= */
+/* 🏷 Logo */
+/* ============================= */
+
 .logo-name {
-  padding: 0rem 0.7rem;
+  padding: 0 0.7rem;
 }
 
 .logo-name h1 {
-  font-size: 2.7rem;
-  color: #fff;
+  font-size: 2.5rem;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.15rem;
+  margin: 0;
 }
 
-/* navigation styles */
+/* ============================= */
+/* 🧭 Navigation */
+/* ============================= */
+
 nav {
   display: flex;
-  gap: 1.5rem;
-  padding: 1rem;
+  align-items: center;
+  gap: 2rem;
+  background-color: #ffffff2f;
+  padding: 0.5rem 1.5rem;
+  border-radius: 10px;
 }
+
 nav a {
+  position: relative;
   text-decoration: none;
   font-size: 1.2rem;
-  color: #fff;
+  color: #ffffff;
+  font-weight: 500;
+  transition: 0.4s ease;
 }
 
-/* auth buttons styles */
-.auth-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
+/* ============================= */
+/* 🐙 GitHub Button */
+/* ============================= */
 
-.auth-buttons button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
+.github-btn {
+  display: inline-block;
+  background: #004d1a;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.667);
+
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+
   cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+
+  transition: all 0.3s ease;
+}
+
+.github-btn:hover {
+  background: #ffffffcb;
+  color: #065f46;
+  font-weight: 600;
+  transform: translateY(-2px);
+}
+
+/* ============================= */
+/* 📱 Responsive */
+/* ============================= */
+
+@media (max-width: 900px) {
+  .header {
+    padding: 0 1.5rem;
+  }
+
+  .logo-name h1 {
+    font-size: 1.6rem;
+  }
+
+  nav {
+    gap: 1.2rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+  }
+
+  button {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
 }

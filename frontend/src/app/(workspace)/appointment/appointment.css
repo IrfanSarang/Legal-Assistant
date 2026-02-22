@@ -1,61 +1,128 @@
-.appointment-container {
-  width: 100%;
-  height: 100%;
+.appointment-page {
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.page-header {
   display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-/* Appointment details Styles */
-.appointemt-details {
-  width: 90%;
-  height: 100%;
-  background-color: pink;
-}
-
-.appointemt-details h1 {
-  text-align: center;
-  font-size: 2.5rem;
-  padding: 1rem 0.2rem;
-}
-
-/* Appointment button styles */
-.appointment-button {
-  background-color: brown;
-  display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  padding: 0.6rem 0.2rem;
+  margin-bottom: 2rem;
 }
 
-.appointment-button button {
-  padding: 0.3rem 1rem;
-  font-size: 1.2rem;
-  border-radius: 7px;
+.page-header h1 {
+  color: #166534;
+  margin: 0;
 }
 
-/* Upcomings appointment details */
-
-.upcomings-appointment {
-  width: 30%;
-  height: 100%;
-  background-color: green;
+.page-header p {
+  color: #6b7280;
+  margin-top: 0.25rem;
 }
 
-/* appointment list styles */
-
-.appointment-list {
-  flex: 1;
-  padding: 1rem 1.5rem;
+.header-actions {
+  display: flex;
+  gap: 1rem;
 }
 
-.appointment-list h2 {
-  text-align: center;
-  font-size: 2rem;
+/* Buttons */
+.primary-btn {
+  background: #166534;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.appointment-grid {
+.secondary-btn {
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Table Styling */
+.table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.appointment-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.appointment-table th {
+  background: #f3f4f6;
+  padding: 1rem;
+  color: #4b5563;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.appointment-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.font-bold {
+  font-weight: 600;
+  color: #111827;
+}
+
+.contact-cell {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+}
+
+.contact-cell small {
+  color: #6b7280;
+}
+
+.description-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #4b5563;
+}
+
+.action-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+}
+
+.edit-btn {
+  background: #dcfce7;
+  color: #166534;
+}
+.delete-btn {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-msg {
+  padding: 4rem;
+  text-align: center;
+  font-weight: 500;
 }
