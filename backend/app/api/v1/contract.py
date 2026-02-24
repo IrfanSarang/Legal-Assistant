@@ -1,71 +1,76 @@
-from fastapi import  HTTPException
+from fastapi import APIRouter, HTTPException
 from app.schemas.contract import ContractAnalysisRequest, ContractAnalysisResponse
 from app.contractRag.retriever import Retriever
 from app.llm.contract_call import DeepSeekLLM
-from fastapi import APIRouter
 
 router = APIRouter()
 
-  # Initialize objects (NO loading here)
+# Initialize once (do NOT load index here)
 retriever = Retriever()
 llm = DeepSeekLLM()
 
 
-@router.post("/analyze", response_model=ContractAnalysisResponse)
-def analyze_contract(request: ContractAnalysisRequest):
-      # 🔹 Load index safely
-    try:
-        retriever.load()
-    except FileNotFoundError:
-        raise HTTPException(
-            status_code=400,
-            detail="FAISS index not found. Please run law ingestion first."
-        )
-      # 1️⃣ Retrieve relevant law sections
-    law_chunks = retriever.retrieve(
-        request.contract_text,
-        top_k=request.top_k
-    )
-
-    if not law_chunks:
-        raise HTTPException(
-            status_code=404,
-            detail="No relevant legal sections found."
-        )
-    law_context = "\n\n".join(
-    chunk["chunk_text"] for chunk in law_chunks
-     )
-      # 2️⃣ Build prompt
-    prompt = f"""
-You are a legal expert.
-
-IMPORTANT:
-- Do NOT start with phrases like "Okay", "I need to", "The task is", or any reasoning text.
-- Do NOT explain your thinking process.
-- Start directly with the clause analysis.
-- Do NOT mention the instructions.
-
-For each problematic clause:
-
-1. Explain the clause in simple words.
-2. State clearly whether it violates any section (mention section number).
-3. Explain the legal consequence in simple terms.
-4. Give one short real-life example of what could happen.
-
-Keep the explanation short and simple.
-Maximum 300 words.
+def build_prompt(law_context: str, contract_text: str) -> str:
+    """
+    Build strict RAG-safe prompt for local LLM.
+    Prevents reasoning leakage and extra explanations.
+    """
+    return f"""
+You are a legal assistant. Use the following retrieved context from Indian law to answer the question.
+Do not make up answers; only answer based on the context.
 
 Law Context:
 {law_context}
 
 Contract:
-{request.contract_text}
+{contract_text}
 """
 
-      # 3️⃣ Call LLM
-    analysis = llm.generate(prompt)
 
-    return {
-        "analysis": analysis,
-        "relevant_law_sections": law_chunks
-    }
+@router.post("/analyze", response_model=ContractAnalysisResponse)
+def analyze_contract(request: ContractAnalysisRequest):
+    try:
+        # 🔹 Load FAISS index safely
+        retriever.load()
+
+        # 🔹 Retrieve relevant law sections
+        law_chunks = retriever.retrieve(
+            request.contract_text,
+            top_k=request.top_k
+        )
+
+        if not law_chunks:
+            raise HTTPException(
+                status_code=404,
+                detail="No relevant legal sections found."
+            )
+
+        # 🔹 Build context from retrieved chunks
+        law_context = "\n\n".join(
+            f"Section {chunk.get('section_number', 'N/A')}:\n{chunk.get('chunk_text', '')}"
+            for chunk in law_chunks
+        )
+
+        # 🔹 Build strict prompt
+        prompt = build_prompt(law_context, request.contract_text)
+
+        # 🔹 Call LLM
+        analysis = llm.generate(prompt)
+
+        # 🔹 Return structured response
+        return ContractAnalysisResponse(
+            analysis=analysis,
+            relevant_law_sections=law_chunks
+        )
+
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=400,
+            detail="FAISS index not found. Please run law ingestion first."
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal Server Error: {str(e)}"
+        )

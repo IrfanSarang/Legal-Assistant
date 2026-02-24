@@ -6,19 +6,19 @@ import Footer from "@/componenets/Footer/Footer";
 const page: React.FC = () => {
   const uniquePoints = [
     {
-      img: "",
+      img: "/unique1.png",
       title: "Not Just an AI Wrapper",
       description:
         "Our system retrieves relevant legal sources before generating responses — ensuring grounded and context-aware outputs. ",
     },
     {
-      img: "",
+      img: "unique2.png",
       title: "Powered by Retrieval-Augmented Generation (RAG)",
       description:
         "Instead of generating answers purely from model memory, the system first retrieves relevant legal materials and then generates responses based on that context.This retrieval-first approach improves precision, contextual relevance, and legal reliability.",
     },
     {
-      img: "",
+      img: "unique3.png",
       title: "Grounded in Actual Legal Documents",
       description:
         "Every response is grounded in retrieved legal sources — such as statutes, case law, and contractual text — reducing hallucination risk and increasing trustworthiness for professional legal use.",
@@ -63,21 +63,6 @@ const page: React.FC = () => {
         {/* Feature 2 */}
         <section className="feature-row">
           <div className="feature-text">
-            <h3>Clause Analysis & Contract Review</h3>
-            <p>
-              Paste or upload contract clauses and receive structured
-              explanations, risk identification, and legal implications —
-              simplifying complex legal language into clear insights.
-            </p>
-          </div>
-          <div className="feature-image">
-            <img src="/feature2.png" alt="Clause Analysis" />
-          </div>
-        </section>
-
-        {/* Feature 3 */}
-        <section className="feature-row">
-          <div className="feature-text">
             <h3>Legal Research Intelligence</h3>
             <p>
               Powered by Retrieval-Augmented Generation (RAG), our system
@@ -87,9 +72,25 @@ const page: React.FC = () => {
             </p>
           </div>
           <div className="feature-image">
-            <img src="/feature3.png" alt="Legal Research" />
+            <img src="/feature2.png" alt="Legal Research" />
           </div>
         </section>
+
+        {/* Feature 3 */}
+        <section className="feature-row">
+          <div className="feature-text">
+            <h3>Clause Analysis & Review</h3>
+            <p>
+              Paste or upload contract clauses and receive structured
+              explanations, risk identification, and legal implications —
+              simplifying complex legal language into clear insights.
+            </p>
+          </div>
+          <div className="feature-image">
+            <img src="/feature3.png" alt="Clause Analysis" />
+          </div>
+        </section>
+
         <section className="unique-section">
           <h2>Why It’s Unique</h2>
 

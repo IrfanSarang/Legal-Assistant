@@ -6,12 +6,18 @@ class DeepSeekLLM:
     def __init__(
         self,
         base_url: str = "http://127.0.0.1:1234/v1/responses",
-        model: str = "deepseek-r1-distill-qwen-7b"
+        model: str = "deepseek-r1-distill-qwen-7b"  # Ideally switch to instruct model
     ):
         self.base_url = base_url
         self.model = model
 
-    def generate(self, prompt: str, max_tokens: int = 1024, temperature: float = 0.0):
+    def generate(
+        self,
+        prompt: str,
+        max_tokens: int = 200,
+        temperature: float = 0.1,
+        top_p: float = 0.8
+    ) -> str:
 
         payload = {
             "model": self.model,
@@ -19,7 +25,8 @@ class DeepSeekLLM:
                 {"role": "user", "content": prompt}
             ],
             "max_tokens": max_tokens,
-            "temperature": temperature
+            "temperature": temperature,
+            "top_p": top_p
         }
 
         try:
@@ -27,10 +34,20 @@ class DeepSeekLLM:
             response.raise_for_status()
             data = response.json()
 
-            if "output" in data:
-                return data["output"][0]["content"][0]["text"].strip()
+            # 🔹 Robust parsing for LM Studio response format
+            if "output" in data and isinstance(data["output"], list):
+                for item in data["output"]:
+                    if item.get("type") == "message":
+                        content = item.get("content", [])
+                        if isinstance(content, list):
+                            return "".join(
+                                part.get("text", "") for part in content
+                            ).strip()
 
             return "Unexpected response format."
 
+        except requests.exceptions.RequestException as e:
+            return f"LLM Request Error: {str(e)}"
+
         except Exception as e:
-            return f"Error calling LLM: {str(e)}"
+            return f"LLM Processing Error: {str(e)}"
