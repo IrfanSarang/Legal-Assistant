@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
         <SidebarItem
           href="/contract"
           icon="📄"
-          label="Contract Analysis"
+          label="Clause Analysis"
           isOpen={isOpen}
         />
       </nav>

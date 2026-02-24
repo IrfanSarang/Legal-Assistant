@@ -38,26 +38,33 @@ const LegalPage: React.FC = () => {
         <section className="main-2">
           {/* Answer Section */}
           <div className="answer-section">
-            <h3>Answer</h3>
+            <h3>Legal Analysis</h3>
+
             {mutation.data?.answer ? (
-              Array.isArray(mutation.data.answer) ? (
-                mutation.data.answer.map((item: any, idx: number) => (
-                  <div key={idx} className="answer-block">
-                    <p>{item.text}</p>
-                    {item.annotations && item.annotations.length > 0 && (
-                      <ul>
-                        {item.annotations.map((anno: string, i: number) => (
-                          <li key={i}>{anno}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <p>{mutation.data.answer}</p>
-              )
+              <div className="answer-content">
+                {Array.isArray(mutation.data.answer) ? (
+                  mutation.data.answer.map((item: any, idx: number) => (
+                    <div key={idx} className="answer-block">
+                      <p className="answer-text">{item.text}</p>
+
+                      {item.annotations?.length > 0 && (
+                        <div className="answer-annotations">
+                          <h4>Key Points</h4>
+                          <ul>
+                            {item.annotations.map((anno: string, i: number) => (
+                              <li key={i}>{anno}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p className="answer-text">{mutation.data.answer}</p>
+                )}
+              </div>
             ) : mutation.isPending ? (
-              <p>Loading answer...</p>
+              <p>Analysing...</p>
             ) : (
               <p>No answer yet.</p>
             )}

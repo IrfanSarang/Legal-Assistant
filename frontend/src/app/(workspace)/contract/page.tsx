@@ -16,20 +16,20 @@ export default function ContractPage() {
   return (
     <main className="contract-container">
       <header className="contract-header">
-        <h1>Contract Analysis</h1>
-        <p>AI-Powered Risk & Compliance Review</p>
-        <p>(Focused on contract law act 1872)</p>
+        <h1>Clause Analysis</h1>
+        <p>Rag-powered analysis</p>
+        <p className="sub-note">(Focused on Contract Law Act 1872)</p>
       </header>
 
       <div className="contract-grid">
-        {/* Input Section */}
+        {/* LEFT PANEL */}
         <section className="contract-input-panel">
           <textarea
             value={contractText}
             onChange={(e) => setContractText(e.target.value)}
-            placeholder="Paste your contract clause here.."
-            rows={20}
+            placeholder="Paste your contract clause here..."
           />
+
           <button
             className="analyze-btn"
             onClick={handleAnalyze}
@@ -39,11 +39,11 @@ export default function ContractPage() {
           </button>
         </section>
 
-        {/* Results Section */}
+        {/* RIGHT PANEL */}
         <section className="contract-results-panel">
           {!data && !isPending && (
             <div className="empty-state">
-              <p>Upload or paste a contract to see the legal breakdown.</p>
+              <p>Answer Section</p>
             </div>
           )}
 
@@ -57,16 +57,14 @@ export default function ContractPage() {
           {data && (
             <div className="analysis-content">
               <div className="analysis-card primary">
-                <h2>
-                  <span className="icon">⚖️</span> Legal Analysis
-                </h2>
+                <h2>⚖️ Legal Analysis</h2>
                 <div className="analysis-text">{data.analysis}</div>
               </div>
 
               <div className="analysis-card secondary">
                 <h3>Relevant Law Sections</h3>
                 <div className="law-list">
-                  {data.relevant_law_sections.map((law, index) => (
+                  {data.relevant_law_sections?.map((law, index) => (
                     <div key={index} className="law-item">
                       <span className="check">✔</span>
                       <p>{law.chunk_text}</p>
