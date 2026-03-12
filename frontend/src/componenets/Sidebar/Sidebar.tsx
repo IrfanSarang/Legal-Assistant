@@ -1,11 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import "./Sidebar.css";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+
+  // Read saved state on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebar-open");
+    if (saved !== null) {
+      setIsOpen(saved === "true");
+    }
+    setMounted(true);
+  }, []);
+
+  // Persist state on change
+  const handleToggle = () => {
+    setIsOpen((prev) => {
+      localStorage.setItem("sidebar-open", String(!prev));
+      return !prev;
+    });
+  };
+
+  // Prevent hydration mismatch — render nothing until mounted
+  if (!mounted) return null;
 
   return (
     <aside className={`sidebar ${isOpen ? "open" : "closed"}`}>
@@ -13,7 +36,7 @@ const Sidebar: React.FC = () => {
         {isOpen && <h2 className="sidebar-title">Features</h2>}
         <button
           className="toggle-btn"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={handleToggle}
           aria-label="Toggle Sidebar"
         >
           {isOpen ? "✕" : "☰"}
@@ -52,11 +75,20 @@ interface ItemProps {
   isOpen: boolean;
 }
 
-const SidebarItem = ({ href, icon, label, isOpen }: ItemProps) => (
-  <Link href={href} className="sidebar-link" title={!isOpen ? label : ""}>
-    <span className="icon">{icon}</span>
-    {isOpen && <span className="label">{label}</span>}
-  </Link>
-);
+const SidebarItem = ({ href, icon, label, isOpen }: ItemProps) => {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
+  return (
+    <Link
+      href={href}
+      className={`sidebar-link ${isActive ? "active" : ""}`}
+      title={!isOpen ? label : ""}
+    >
+      <span className="icon">{icon}</span>
+      {isOpen && <span className="label">{label}</span>}
+    </Link>
+  );
+};
 
 export default Sidebar;

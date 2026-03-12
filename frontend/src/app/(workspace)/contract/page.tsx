@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useAnalyzeContract } from "../../../hooks/useContract";
 import "./contract.css";
 
@@ -29,7 +30,6 @@ export default function ContractPage() {
             onChange={(e) => setContractText(e.target.value)}
             placeholder="Paste your contract clause here..."
           />
-
           <button
             className="analyze-btn"
             onClick={handleAnalyze}
@@ -41,12 +41,14 @@ export default function ContractPage() {
 
         {/* RIGHT PANEL */}
         <section className="contract-results-panel">
+          {/* Empty state */}
           {!data && !isPending && (
             <div className="empty-state">
               <p>Answer Section</p>
             </div>
           )}
 
+          {/* Loading state */}
           {isPending && (
             <div className="loading-state">
               <div className="spinner"></div>
@@ -54,22 +56,37 @@ export default function ContractPage() {
             </div>
           )}
 
+          {/* Results */}
           {data && (
             <div className="analysis-content">
+              {/* FIX 1: ReactMarkdown renders ** bold, ## headers etc */}
               <div className="analysis-card primary">
                 <h2>⚖️ Legal Analysis</h2>
-                <div className="analysis-text">{data.analysis}</div>
+                <div className="analysis-text markdown-body">
+                  <ReactMarkdown>{data.analysis}</ReactMarkdown>
+                </div>
               </div>
 
+              {/* FIX 2: correct keys — section/title/content/score */}
               <div className="analysis-card secondary">
-                <h3>Relevant Law Sections</h3>
+                <h3>📚 Relevant Law Sections</h3>
                 <div className="law-list">
-                  {data.relevant_law_sections?.map((law, index) => (
-                    <div key={index} className="law-item">
-                      <span className="check">✔</span>
-                      <p>{law.chunk_text}</p>
-                    </div>
-                  ))}
+                  {data.relevant_law_sections?.map(
+                    (law: any, index: number) => (
+                      <div key={index} className="law-item">
+                        <span className="check">✔</span>
+                        <div className="law-item-body">
+                          <div className="law-item-header">
+                            <span className="law-section-badge">
+                              Section {law.section}
+                            </span>
+                          </div>
+                          <p className="law-title">{law.title}</p>
+                          <p className="law-content">{law.content}</p>
+                        </div>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             </div>

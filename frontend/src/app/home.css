@@ -9,7 +9,7 @@
 }
 
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
   background-color: #ffffff;
   color: #1f2937;
 }
