@@ -1,4 +1,8 @@
 /* Sidebar Container */
+
+* {
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
 .sidebar {
   height: 100vh;
   background: linear-gradient(180deg, #0f3d1a, #14532d, #166534);
@@ -82,6 +86,11 @@
 
 .sidebar-link:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 3px solid rgba(255, 255, 255, 0.7);
 }
 
 /* Fixed Icon Size is the secret to a stable sidebar */

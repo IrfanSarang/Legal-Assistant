@@ -1,104 +1,93 @@
 import os
+import pickle
 import faiss
 import numpy as np
-import pickle
-from sentence_transformers import SentenceTransformer
 from typing import List, Dict
+from sentence_transformers import SentenceTransformer
 
 
 class ContractFAISSManager:
+    """
+    Manages the FAISS index and the corresponding chunk list.
+
+    Usage:
+        model   = SentenceTransformer("nlpaueb/legal-bert-base-uncased"
+        manager = ContractFAISSManager(model, "./data/vector_store")
+
+        # Build once:
+        manager.create_index(chunks)
+
+        # On subsequent runs (index already on disk):
+        manager.load_index()
+
+    Attributes:
+        index  : faiss.Index or None
+        chunks : List[Dict]   — mirrors the FAISS vectors 1-to-1
+    """
 
     def __init__(
         self,
-        embedding_model_name: str = "all-MiniLM-L6-v2",
+        model:             SentenceTransformer,
+        vector_store_path: str = "./data/vector_store",
     ):
-        self.base_dir = os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        )
+        self.model       = model
+        self.vector_dir  = vector_store_path
+        self.index_file  = os.path.join(vector_store_path, "faiss_index.bin")
+        self.chunks_file = os.path.join(vector_store_path, "chunks.pkl")
+        self.index       = None
+        self.chunks: List[Dict] = []
 
-        self.vector_dir = os.path.join(
-            self.base_dir, "data", "vector_store"
-        )
+    # ------------------------------------------------------------------
+    def create_index(self, chunked_sections: List[Dict]) -> None:
+        """
+        Embed all chunks, build a FAISS IndexFlatIP, and persist to disk.
 
-        self.index_file = os.path.join(
-            self.vector_dir, "faiss_index.bin"
-        )
-
-        self.chunks_file = os.path.join(
-            self.vector_dir, "chunks.pkl"
-        )
-
-        self.model = SentenceTransformer(embedding_model_name)
-
-        self.index = None
-        self.chunked_sections = []
-
-    # -----------------------------
-    # One-time ingestion
-    # -----------------------------
-    def create_index(self, chunked_sections: List[Dict]):
-
+        Args:
+            chunked_sections : output of structure_sections_for_rag()
+        """
         os.makedirs(self.vector_dir, exist_ok=True)
 
-        print("Generating embeddings...")
-
-        # 🔥 Match first manager
-        texts = [c["chunk_text"] for c in chunked_sections]
-
+        print("[faiss] Generating embeddings...")
+        texts      = [c["embedding_text"] for c in chunked_sections]
         embeddings = self.model.encode(texts, show_progress_bar=True)
         embeddings = np.array(embeddings).astype("float32")
 
-        dimension = embeddings.shape[1]
+        # Normalise to unit vectors so inner-product == cosine similarity
+        faiss.normalize_L2(embeddings)
 
-        # 🔥 Use L2 distance (like first version)
-        index = faiss.IndexFlatL2(dimension)
+        dimension = embeddings.shape[1]
+        index     = faiss.IndexFlatIP(dimension)
         index.add(embeddings)
 
+        # Persist
         faiss.write_index(index, self.index_file)
-
         with open(self.chunks_file, "wb") as f:
             pickle.dump(chunked_sections, f)
 
-        print(f"FAISS index saved with {index.ntotal} vectors.")
+        self.index  = index
+        self.chunks = chunked_sections
+        print(f"[faiss] ✅ Index saved — {index.ntotal} vectors, dim={dimension}")
 
-        self.index = index
-        self.chunked_sections = chunked_sections
+    # ------------------------------------------------------------------
+    def load_index(self) -> None:
+        """
+        Load a previously built FAISS index and chunk list from disk.
 
-    # -----------------------------
-    # Load index
-    # -----------------------------
-    def load_index(self):
-
+        Raises:
+            FileNotFoundError if the index has not been built yet.
+        """
         if not os.path.exists(self.index_file):
             raise FileNotFoundError(
                 "FAISS index not found. Run create_index() first."
             )
 
         self.index = faiss.read_index(self.index_file)
-
         with open(self.chunks_file, "rb") as f:
-            self.chunked_sections = pickle.load(f)
+            self.chunks = pickle.load(f)
 
-        print(f"FAISS index loaded with {self.index.ntotal} vectors.")
+        print(f"[faiss] ✅ Index loaded — {self.index.ntotal} vectors.")
 
-    # -----------------------------
-    # Query
-    # -----------------------------
-    def query(self, query_text: str, top_k: int = 2) -> List[Dict]:
-
-        if self.index is None:
-            self.load_index()
-
-        query_vec = self.model.encode([query_text]).astype("float32")
-
-        # ❌ No normalization (because using L2)
-
-        distances, indices = self.index.search(query_vec, top_k)
-
-        results = []
-
-        for idx in indices[0]:
-            if 0 <= idx < len(self.chunked_sections):
-                results.append(self.chunked_sections[idx])
-
-        return results
+    # ------------------------------------------------------------------
+    def index_exists(self) -> bool:
+        """Return True if a persisted index is available on disk."""
+        return os.path.exists(self.index_file) and os.path.exists(self.chunks_file)

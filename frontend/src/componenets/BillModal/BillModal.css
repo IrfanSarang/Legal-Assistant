@@ -1,0 +1,203 @@
+.bill-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.bill-modal {
+  background: white;
+  border-radius: 14px;
+  width: 460px;
+  max-width: 95vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bill-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  background: #166534;
+  color: white;
+}
+
+.bill-modal-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.bill-close-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.bill-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.bill-modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bill-client-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+
+.bill-client-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #166534;
+}
+
+.bill-client-sub {
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+
+.bill-divider {
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.bill-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bill-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.required {
+  color: #dc2626;
+}
+
+.bill-field input {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.9rem;
+  color: #111827;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.bill-field input:focus {
+  border-color: #166534;
+  box-shadow: 0 0 0 2px rgba(22, 101, 52, 0.15);
+}
+
+.payment-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.payment-btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  border: 1.5px solid #d1d5db;
+  background: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #374151;
+  transition: all 0.15s;
+}
+
+.payment-btn:hover {
+  border-color: #166534;
+  color: #166534;
+}
+
+.payment-btn.active {
+  background: #166534;
+  border-color: #166534;
+  color: white;
+  font-weight: 600;
+}
+
+.bill-preview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.bill-number-preview {
+  font-weight: 700;
+  color: #166534;
+  font-size: 0.85rem;
+}
+
+.bill-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.bill-cancel-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.bill-cancel-btn:hover {
+  background: #f3f4f6;
+}
+
+.bill-generate-btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  border: none;
+  background: #166534;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.bill-generate-btn:hover {
+  background: #14532d;
+}
+
+.bill-generate-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}

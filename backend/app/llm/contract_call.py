@@ -14,7 +14,7 @@ class DeepSeekLLM:
     def generate(
         self,
         prompt: str,
-        max_tokens: int = 200,
+        max_tokens: int = 1024,
         temperature: float = 0.1,
         top_p: float = 0.8
     ) -> str:

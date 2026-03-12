@@ -9,7 +9,7 @@ class Retriever:
 
     def __init__(
         self,
-        model_name: str = "all-MiniLM-L6-v2",
+        model_name: str = "sentence-transformers/all-mpnet-base-v2",
         vector_store_path: str = "./data/vector_store"
     ):
         self.model = SentenceTransformer(model_name)
@@ -51,25 +51,29 @@ class Retriever:
     # -----------------------------
     # SEARCH FUNCTION
     # -----------------------------
-    def retrieve(self, query: str, top_k: int = 2):
-
+    def retrieve(self, query: str, top_k: int = 5):
         if self.index is None or self.chunks is None:
             raise ValueError("Index not loaded. Call load() first.")
 
-        # Embed query
+        # Fetch more candidates then deduplicate
+        fetch_k = top_k * 4
         query_vector = self.model.encode([query])
         query_vector = np.array(query_vector).astype("float32")
-
-        # 🔥 IMPORTANT: Normalize (since index uses cosine similarity)
         faiss.normalize_L2(query_vector)
 
-        # Search
-        distances, indices = self.index.search(query_vector, top_k)
+        distances, indices = self.index.search(query_vector, fetch_k)
 
         results = []
+        seen_sections = set()
 
         for idx in indices[0]:
             if idx < len(self.chunks):
-                results.append(self.chunks[idx])
+                chunk = self.chunks[idx]
+                section_id = chunk.get("metadata", {}).get("section", idx)
+                if section_id not in seen_sections:
+                    seen_sections.add(section_id)
+                    results.append(chunk)
+                if len(results) >= top_k:
+                    break
 
         return results
