@@ -6,91 +6,86 @@ import { useAnalyzeContract } from "../../../hooks/useContract";
 import "./contract.css";
 
 export default function ContractPage() {
-  const [contractText, setContractText] = useState("");
+  const [query, setQuery] = useState("");
   const { mutate, data, isPending } = useAnalyzeContract();
 
   const handleAnalyze = () => {
-    if (!contractText.trim()) return;
-    mutate({ contract_text: contractText });
+    if (!query.trim()) return;
+    mutate({ query });
   };
 
   return (
     <main className="contract-container">
       <header className="contract-header">
-        <h1>Clause Analysis</h1>
-        <p>Rag-powered analysis</p>
-        <p className="sub-note">(Focused on Contract Law Act 1872)</p>
+        <div className="header-badge">Contract Intelligence</div>
+        <h1>Contract Law Assistant</h1>
+        <p>Strategic analysis and clause review powered by AI.</p>
+        <span className="sub-note">Grounding: Contract Law & Precedents</span>
       </header>
 
       <div className="contract-grid">
         {/* LEFT PANEL */}
         <section className="contract-input-panel">
-          <textarea
-            value={contractText}
-            onChange={(e) => setContractText(e.target.value)}
-            placeholder="Paste your contract clause here..."
-          />
+          <div className="input-group">
+            <label htmlFor="contract-query">Clause or Question</label>
+            <textarea
+              id="contract-query"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="e.g., Analyze the termination clause for potential risks..."
+            />
+          </div>
           <button
-            className="analyze-btn"
+            className={`analyze-btn ${isPending ? 'loading' : ''}`}
             onClick={handleAnalyze}
             disabled={isPending}
           >
-            {isPending ? "Processing..." : "Analyze Contract"}
+            {isPending ? (
+              <>
+                <span className="spinner"></span>
+                Processing...
+              </>
+            ) : "Analyze Contract"}
           </button>
         </section>
 
         {/* RIGHT PANEL */}
         <section className="contract-results-panel">
-          {/* Empty state */}
-          {!data && !isPending && (
-            <div className="empty-state">
-              <p>Answer Section</p>
-            </div>
-          )}
+          <div className="panel-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <h3>Legal Insights</h3>
+          </div>
 
-          {/* Loading state */}
-          {isPending && (
-            <div className="loading-state">
-              <div className="spinner"></div>
-              <p>Extracting legal insights...</p>
-            </div>
-          )}
+          <div className="panel-content">
+            {/* Empty state */}
+            {!data && !isPending && (
+              <div className="state-text empty-state">
+                <p>Submit a clause to begin the analysis.</p>
+              </div>
+            )}
 
-          {/* Results */}
-          {data && (
-            <div className="analysis-content">
-              {/* FIX 1: ReactMarkdown renders ** bold, ## headers etc */}
-              <div className="analysis-card primary">
-                <h2>⚖️ Legal Analysis</h2>
-                <div className="analysis-text markdown-body">
-                  <ReactMarkdown>{data.analysis}</ReactMarkdown>
+            {/* Loading state */}
+            {isPending && (
+              <div className="state-text loading-state">
+                <div className="shimmer"></div>
+                <p>Extracting legal insights and reviewing precedents...</p>
+              </div>
+            )}
+
+            {/* Result */}
+            {data && (
+              <div className="analysis-content">
+                <div className="analysis-card-premium">
+                  <div className="card-accent"></div>
+                  <div className="analysis-text markdown-body">
+                    <ReactMarkdown>{data.answer}</ReactMarkdown>
+                  </div>
                 </div>
               </div>
-
-              {/* FIX 2: correct keys — section/title/content/score */}
-              <div className="analysis-card secondary">
-                <h3>📚 Relevant Law Sections</h3>
-                <div className="law-list">
-                  {data.relevant_law_sections?.map(
-                    (law: any, index: number) => (
-                      <div key={index} className="law-item">
-                        <span className="check">✔</span>
-                        <div className="law-item-body">
-                          <div className="law-item-header">
-                            <span className="law-section-badge">
-                              Section {law.section}
-                            </span>
-                          </div>
-                          <p className="law-title">{law.title}</p>
-                          <p className="law-content">{law.content}</p>
-                        </div>
-                      </div>
-                    ),
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </section>
       </div>
     </main>

@@ -1,13 +1,17 @@
+/* ============================================
+   CLIENT FORM — Premium Modal Form
+   ============================================ */
+
 .client-form-container {
-  padding: 1rem;
-  background: white;
+  padding: 0;
+  background: var(--surface-card);
   width: 100%;
 }
 
 .client-form-container h1 {
-  color: #166534; /* Forest Green */
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  color: var(--color-neutral-900);
+  font-size: 1.25rem;
+  margin-bottom: var(--space-6);
   font-weight: 700;
   text-align: left;
 }
@@ -15,65 +19,65 @@
 .client-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-5);
 }
 
 .client-form label {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: var(--space-2);
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-neutral-700);
 }
 
 .client-form input {
-  padding: 0.8rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s ease;
+  height: 44px;
+  padding: 0 var(--space-4);
+  border: 1.5px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-family: var(--font-primary);
+  color: var(--color-neutral-900);
+  background: var(--surface-card);
+  transition: all var(--transition-fast);
 }
 
-/* Focus state for custom feel */
 .client-form input:focus {
   outline: none;
-  border-color: #166534;
-  box-shadow: 0 0 0 4px rgba(22, 101, 52, 0.1);
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.1);
 }
 
 .add-client-button {
-  margin-top: 0.5rem;
-  background-color: #166534;
+  margin-top: var(--space-2);
+  height: 44px;
+  background-color: var(--color-primary-600);
   color: white;
-  padding: 0.8rem;
+  padding: 0 var(--space-6);
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
   font-weight: 600;
+  font-family: var(--font-primary);
   cursor: pointer;
-  transition:
-    background-color 0.2s,
-    transform 0.1s;
+  transition: all var(--transition-fast);
 }
 
 .add-client-button:hover:not(:disabled) {
-  background-color: #15803d;
-}
-
-.add-client-button:active:not(:disabled) {
-  transform: scale(0.98);
+  background-color: var(--color-primary-700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(22, 101, 52, 0.2);
 }
 
 .add-client-button:disabled {
-  background-color: #9ca3af;
+  background-color: var(--color-neutral-400);
   cursor: not-allowed;
   opacity: 0.8;
 }
 
-/* Modal styling tweak to ensure form looks centered */
 .modal-content {
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }

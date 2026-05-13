@@ -1,104 +1,146 @@
+/* ============================================
+   CLIENT DETAILS — Premium Card Grid
+   ============================================ */
+
 .client-details-container {
-  padding: 2rem;
-  background-color: #f9fafb;
+  padding: var(--space-8);
+  background-color: var(--surface-page);
   min-height: 100vh;
+  animation: clientEnter 300ms ease both;
 }
 
+@keyframes clientEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Page Header ─────────────────────────── */
 .client-header-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.5rem;
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: 1.5rem;
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--color-neutral-200);
+  padding-bottom: var(--space-6);
 }
 
 .client-header-section h1 {
-  color: #166534;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-neutral-900);
   margin: 0;
-  font-size: 1.8rem;
 }
 
 .client-header-section p {
-  color: #6b7280;
-  margin: 0.25rem 0 0 0;
+  color: var(--color-neutral-500);
+  margin: var(--space-1) 0 0 0;
+  font-size: 0.875rem;
 }
 
 .add-clients-btn {
-  background: #166534;
+  height: 44px;
+  background: var(--color-primary-600);
   color: white;
   border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
   font-weight: 600;
+  font-size: 0.875rem;
+  font-family: var(--font-primary);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .add-clients-btn:hover {
-  background: #15803d;
+  background: var(--color-primary-700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(22, 101, 52, 0.2);
 }
 
-/* Grid Layout */
+/* ── Card Grid ───────────────────────────── */
 .clients-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
 }
 
+@media (max-width: 1024px) {
+  .clients-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .clients-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Client Card ─────────────────────────── */
 .client-card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  border: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .client-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .client-card-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .avatar {
-  width: 45px;
-  height: 45px;
-  background: #dcfce7;
-  color: #166534;
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary-100);
+  color: var(--color-primary-700);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 .client-card-header h3 {
   margin: 0;
-  color: #111827;
-  font-size: 1.1rem;
+  color: var(--color-neutral-900);
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .client-card-body {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-4);
 }
 
 .info-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-  color: #4b5563;
-  font-size: 0.95rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  color: var(--color-neutral-500);
+  font-size: 0.875rem;
+}
+
+.info-row .icon {
+  font-size: 0.875rem;
+  min-width: auto;
 }
 
 .email-text {
@@ -107,43 +149,58 @@
 
 .client-card-footer {
   display: flex;
-  gap: 0.75rem;
-  border-top: 1px solid #f3f4f6;
-  padding-top: 1rem;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-neutral-100);
+  padding-top: var(--space-4);
 }
 
 .update-btn {
   flex: 1;
-  background: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
-  padding: 0.5rem;
-  border-radius: 6px;
+  height: 36px;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.8125rem;
+  font-family: var(--font-primary);
+  transition: all var(--transition-fast);
 }
 
 .delete-btn {
   flex: 1;
-  background: #fee2e2;
-  color: #991b1b;
+  height: 36px;
+  background: var(--color-danger-100);
+  color: var(--color-danger-700);
   border: none;
-  padding: 0.5rem;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.8125rem;
+  font-family: var(--font-primary);
+  transition: all var(--transition-fast);
 }
 
 .update-btn:hover {
-  background: #e5e7eb;
+  background: var(--color-neutral-200);
 }
+
 .delete-btn:hover {
   background: #fecaca;
 }
 
+/* ── Status ──────────────────────────────── */
 .status-msg {
   text-align: center;
-  padding: 5rem;
-  font-size: 1.2rem;
-  color: #6b7280;
+  padding: var(--space-16);
+  font-size: 1rem;
+  color: var(--color-neutral-500);
+}
+
+.no-data {
+  text-align: center;
+  padding: var(--space-12);
+  color: var(--color-neutral-500);
+  font-size: 0.9375rem;
 }

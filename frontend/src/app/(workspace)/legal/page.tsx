@@ -1,151 +1,98 @@
 "use client";
 import React, { useState } from "react";
-import "./legal.css";
+
 import { useAnalyseQuestion } from "@/hooks/uselegal";
 import ReactMarkdown from "react-markdown";
-
-interface ChunkResult {
-  section_number: string;
-  title: string;
-  chunk_type: string;
-  score: number;
-  chunk_text: string;
-}
-
-interface LegalQueryResponse {
-  question: string;
-  answer: any;
-  retrieved_sections: string[];
-  retrieved_chunks: ChunkResult[];
-}
-
-// ✅ Safely convert any answer format to plain string
-function extractAnswerText(answer: any): string {
-  if (!answer) return "";
-
-  // Already a plain string
-  if (typeof answer === "string") return answer;
-
-  // Array of content blocks — DeepSeek sometimes returns this
-  if (Array.isArray(answer)) {
-    return answer
-      .map((item: any) => {
-        if (typeof item === "string") return item;
-        if (item?.text) return item.text;
-        if (item?.content) {
-          if (typeof item.content === "string") return item.content;
-          if (Array.isArray(item.content)) {
-            return item.content
-              .map((c: any) => c?.text || c?.value || "")
-              .join("");
-          }
-        }
-        return "";
-      })
-      .filter(Boolean)
-      .join("\n");
-  }
-
-  // Single object with text/content field
-  if (typeof answer === "object") {
-    if (answer.text) return String(answer.text);
-    if (answer.content) return String(answer.content);
-    if (answer.value) return String(answer.value);
-    // Last resort
-    return JSON.stringify(answer);
-  }
-
-  return String(answer);
-}
+import "./legal.css";
 
 const LegalPage: React.FC = () => {
   const [question, setQuestion] = useState("");
   const mutation = useAnalyseQuestion();
-  const data = mutation.data as LegalQueryResponse | undefined;
 
   const handleAnalyse = () => {
     if (question.trim() === "") return;
     mutation.mutate({ query: question });
   };
 
-  // ✅ Extract safe string from whatever answer format comes back
-  const answerText = extractAnswerText(data?.answer);
+  const answerText = mutation.data?.answer ?? "";
 
   return (
     <main className="legal-container">
-      <section className="legal-header">
-        <h1>Legal Intelligence</h1>
-        <p>RAG-based Analysis</p>
-        <p>(Focused on Criminal law Domain)</p>
-      </section>
+      <header className="legal-header">
+        <div className="header-badge">AI Legal Intelligence</div>
+        <h1>Criminal Law Analysis</h1>
+        <p>Grounded insights based on the BNS 2023 legal framework.</p>
+      </header>
 
       <section className="legal-main">
         {/* Input Section */}
-        <section className="main-1">
-          <textarea
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Enter your legal question here..."
-            rows={8}
-          />
-          <button onClick={handleAnalyse} disabled={mutation.isPending}>
-            {mutation.isPending ? "Analysing..." : "Analyse"}
+        <div className="main-1">
+          <div className="input-group">
+            <label htmlFor="legal-query">Describe the scenario or ask a question</label>
+            <textarea
+              id="legal-query"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="e.g., What are the legal implications of...?"
+              rows={8}
+            />
+          </div>
+          
+          <button 
+            className={`analyse-btn ${mutation.isPending ? 'loading' : ''}`}
+            onClick={handleAnalyse} 
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? (
+              <>
+                <span className="spinner"></span>
+                Analysing...
+              </>
+            ) : (
+              "Generate Analysis"
+            )}
           </button>
-        </section>
 
-        {/* Output Sections */}
-        <section className="main-2">
-          {/* Answer Section */}
+          {mutation.isError && (
+            <div className="error-message">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              {mutation.error?.message ?? "Analysis failed. Please check your connection."}
+            </div>
+          )}
+        </div>
+
+        {/* Output Section */}
+        <div className="main-2">
           <div className="answer-section">
-            <h3>Legal Analysis</h3>
+            <div className="answer-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+              </svg>
+              <h3>Legal Analysis Result</h3>
+            </div>
 
-            {answerText ? (
-              <div className="answer-block">
-                <div className="markdown-body">
-                  <ReactMarkdown>{answerText}</ReactMarkdown>
-                </div>
-              </div>
-            ) : mutation.isPending ? (
-              <p className="state-text">Analysing your query...</p>
-            ) : (
-              <p className="state-text">No answer yet. Ask a legal question.</p>
-            )}
-          </div>
-
-          {/* Retrieved Chunks Section */}
-          <div className="chunks-section">
-            <h3>Retrieved Legal Sections</h3>
-
-            {data?.retrieved_chunks && data.retrieved_chunks.length > 0 ? (
-              data.retrieved_chunks.map((chunk: ChunkResult, idx: number) => (
-                <div key={idx} className="chunk-block">
-                  {/* Section Header */}
-                  <div className="chunk-header">
-                    <span className="chunk-section-badge">
-                      Section {chunk.section_number}
-                    </span>
-                    <span className="chunk-type-badge">{chunk.chunk_type}</span>
-                    <span className="chunk-score">
-                      Score: {chunk.score?.toFixed(2)}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  {chunk.title && <p className="chunk-title">{chunk.title}</p>}
-
-                  {/* Chunk Text */}
-                  <div className="chunk-text">
-                    <ReactMarkdown>{String(chunk.chunk_text)}</ReactMarkdown>
+            <div className="answer-content">
+              {answerText ? (
+                <div className="answer-block">
+                  <div className="markdown-body">
+                    <ReactMarkdown>{answerText}</ReactMarkdown>
                   </div>
                 </div>
-              ))
-            ) : mutation.isPending ? (
-              <p className="state-text">Loading sections...</p>
-            ) : (
-              <p className="state-text">No sections retrieved yet.</p>
-            )}
+              ) : mutation.isPending ? (
+                <div className="state-text loading-state">
+                  <div className="shimmer"></div>
+                  <p>Searching legal database and generating response...</p>
+                </div>
+              ) : (
+                <div className="state-text empty-state">
+                  <p>Your analysis will appear here after you submit a query.</p>
+                </div>
+              )}
+            </div>
           </div>
-        </section>
+        </div>
       </section>
     </main>
   );

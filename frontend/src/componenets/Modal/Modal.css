@@ -1,44 +1,46 @@
+/* ============================================
+   MODAL — Premium Overlay
+   ============================================ */
+
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   z-index: 1000;
-
-  animation: fadeIn 0.4s ease;
+  animation: modalFadeIn var(--transition-slow) ease;
 }
 
 .modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-
-  animation: scaleIn 0.4s ease;
+  background: var(--surface-card);
+  padding: var(--space-8);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--shadow-lg);
+  animation: modalScaleIn var(--transition-slow) ease;
 }
 
 /* Backdrop animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Modal animation */
-@keyframes scaleIn {
+@keyframes modalScaleIn {
   from {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.95) translateY(8px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 }

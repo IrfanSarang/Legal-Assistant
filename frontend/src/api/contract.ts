@@ -1,14 +1,11 @@
 import axiosInstance from "../lib/axiosInstance";
-import {
-  ContractAnalysisRequest,
-  ContractAnalysisResponse,
-} from "../types/contract";
+import { QueryRequest, QueryResponse } from "../types/contract";
 
-const BASE_URL = "/api/v1/contract/analyze";
+const BASE_URL = "/api/v1/contract/analyse";
 
 export const analyzeContract = async (
-  payload: ContractAnalysisRequest,
-): Promise<ContractAnalysisResponse> => {
+  payload: QueryRequest,
+): Promise<QueryResponse> => {
   const { data } = await axiosInstance.post(BASE_URL, payload);
   return data;
 };

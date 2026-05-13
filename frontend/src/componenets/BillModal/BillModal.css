@@ -1,30 +1,54 @@
+/* ============================================
+   BILL MODAL — Premium Invoice Generator
+   ============================================ */
+
 .bill-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  animation: billFadeIn var(--transition-slow) ease;
+}
+
+@keyframes billFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .bill-modal {
-  background: white;
-  border-radius: 14px;
-  width: 460px;
+  background: var(--surface-card);
+  border-radius: var(--radius-xl);
+  width: 480px;
   max-width: 95vw;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: billSlideIn 0.3s ease-out;
+}
+
+@keyframes billSlideIn {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .bill-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem 1.5rem;
-  background: #166534;
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-primary-600);
   color: white;
 }
 
@@ -35,109 +59,116 @@
 }
 
 .bill-close-btn {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   border: none;
   color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
 }
 
 .bill-close-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .bill-modal-body {
-  padding: 1.5rem;
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .bill-client-info {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
+  gap: var(--space-1);
+  background: var(--color-primary-50);
+  border: 1px solid var(--color-primary-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
 }
 
 .bill-client-name {
   font-weight: 700;
   font-size: 1rem;
-  color: #166534;
+  color: var(--color-primary-700);
 }
 
 .bill-client-sub {
-  font-size: 0.82rem;
-  color: #6b7280;
+  font-size: 0.8125rem;
+  color: var(--color-neutral-500);
 }
 
 .bill-divider {
   height: 1px;
-  background: #e5e7eb;
+  background: var(--color-neutral-200);
 }
 
 .bill-field {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: var(--space-2);
 }
 
 .bill-field label {
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-neutral-700);
 }
 
 .required {
-  color: #dc2626;
+  color: var(--color-danger-600);
 }
 
 .bill-field input {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 0.55rem 0.8rem;
-  font-size: 0.9rem;
-  color: #111827;
+  height: 44px;
+  border: 1.5px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-4);
+  font-size: 0.9375rem;
+  font-family: var(--font-primary);
+  color: var(--color-neutral-900);
   outline: none;
-  transition: border 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .bill-field input:focus {
-  border-color: #166534;
-  box-shadow: 0 0 0 2px rgba(22, 101, 52, 0.15);
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.1);
 }
 
 .payment-options {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 
 .payment-btn {
-  padding: 0.45rem 0.9rem;
-  border-radius: 8px;
-  border: 1.5px solid #d1d5db;
-  background: white;
-  font-size: 0.85rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-neutral-200);
+  background: var(--surface-card);
+  font-size: 0.8125rem;
+  font-family: var(--font-primary);
   cursor: pointer;
-  color: #374151;
-  transition: all 0.15s;
+  color: var(--color-neutral-700);
+  transition: all var(--transition-fast);
 }
 
 .payment-btn:hover {
-  border-color: #166534;
-  color: #166534;
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
 }
 
 .payment-btn.active {
-  background: #166534;
-  border-color: #166534;
+  background: var(--color-primary-600);
+  border-color: var(--color-primary-600);
   color: white;
   font-weight: 600;
 }
@@ -146,58 +177,67 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f9fafb;
-  border-radius: 6px;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.85rem;
-  color: #6b7280;
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.8125rem;
+  color: var(--color-neutral-500);
 }
 
 .bill-number-preview {
   font-weight: 700;
-  color: #166534;
-  font-size: 0.85rem;
+  color: var(--color-primary-600);
+  font-size: 0.8125rem;
+  font-family: monospace;
 }
 
 .bill-modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.8rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-neutral-200);
 }
 
 .bill-cancel-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: white;
-  color: #374151;
+  height: 40px;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+  background: var(--surface-card);
+  color: var(--color-neutral-700);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  font-family: var(--font-primary);
+  transition: all var(--transition-fast);
 }
 
 .bill-cancel-btn:hover {
-  background: #f3f4f6;
+  background: var(--color-neutral-100);
 }
 
 .bill-generate-btn {
-  padding: 0.6rem 1.4rem;
-  border-radius: 8px;
+  height: 40px;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
   border: none;
-  background: #166534;
+  background: var(--color-primary-600);
   color: white;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  transition: background 0.2s;
+  font-family: var(--font-primary);
+  transition: all var(--transition-fast);
 }
 
-.bill-generate-btn:hover {
-  background: #14532d;
+.bill-generate-btn:hover:not(:disabled) {
+  background: var(--color-primary-700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(22, 101, 52, 0.2);
 }
 
 .bill-generate-btn:disabled {
-  background: #9ca3af;
+  background: var(--color-neutral-400);
   cursor: not-allowed;
 }

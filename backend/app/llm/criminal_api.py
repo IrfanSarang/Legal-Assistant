@@ -17,25 +17,14 @@ def generate_response(question, retriever):
     )
 
     prompt = ChatPromptTemplate.from_messages([
-    ('system',
-     """You are an Expert Legal Assistant specializing in Contract Analysis.
+        ('system',
+         'You are an Expert Legal Assistant for Criminal Cases. '
+         'Answer using only the context provided below. '
+         'If the answer is not in the context, say you do not know.\n\n'
+         'Context:\n{context}'),
+        ('human', '{question}'),
+    ])
 
-Your responsibilities:
-- Identify and explain key contract clauses (payment terms, termination, liability, IP ownership, confidentiality, etc.)
-- Flag potentially risky, ambiguous, or one-sided provisions
-- Summarize obligations for each party
-- Highlight missing standard clauses or red flags
-- Use clear, plain English — avoid excessive legal jargon
-
-Rules:
-- Answer ONLY using the context provided below
-- If the answer is not found in the context, say: "This information is not present in the provided contract."
-- Always cite the relevant clause or section when possible
-
-Context:
-{context}"""),
-    ('human', '{question}'),
-])
     parser = StrOutputParser()
 
     def format_docs(docs):

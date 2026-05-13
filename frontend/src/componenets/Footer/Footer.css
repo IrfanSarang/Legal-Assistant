@@ -1,25 +1,104 @@
-.footer {
-  background: linear-gradient(
-    90deg,
-    #000b00 0%,
-    #001a00 18%,
-    #003d14 35%,
-    #06883afb 50%,
-    #038135 60%,
-    #003d14 75%,
-    #000b00 100%
-  );
+/* ============================================
+   FOOTER — Premium Legal Footer
+   ============================================ */
 
+.footer {
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-primary-950) 0%,
+      var(--color-primary-900) 30%,
+      var(--color-primary-800) 50%,
+      var(--color-primary-900) 70%,
+      var(--color-primary-950) 100%
+    );
   color: white;
-  padding: 1.5rem 10%;
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: var(--space-8);
 }
 
-.footer p {
-  font-size: 1rem;
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: var(--space-10);
+  padding: var(--space-12) 8%;
+}
+
+/* ── Brand Column ────────────────────────── */
+.footer-brand h3 {
+  font-size: 1.2rem;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-primary);
+}
+
+.footer-logo-bold {
+  font-weight: 700;
+}
+
+.footer-logo-light {
+  font-weight: 300;
+  opacity: 0.85;
+}
+
+.footer-brand p {
+  font-size: 0.875rem;
   line-height: 1.6;
-  opacity: 0.9;
+  opacity: 0.55;
+}
+
+/* ── Link Columns ────────────────────────── */
+.footer-links,
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.footer-links h4,
+.footer-contact h4 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.55;
+  margin-bottom: var(--space-2);
+}
+
+.footer-links a,
+.footer-contact a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  transition: opacity var(--transition-fast);
+}
+
+.footer-links a:hover,
+.footer-contact a:hover {
+  opacity: 0.7;
+}
+
+.footer-contact span {
+  font-size: 0.8125rem;
+  opacity: 0.45;
+}
+
+/* ── Bottom Strip ────────────────────────── */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-4) 8%;
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 0.8125rem;
+  opacity: 0.45;
+}
+
+/* ── Responsive ──────────────────────────── */
+@media (max-width: 768px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    padding: var(--space-8) 6%;
+  }
 }
