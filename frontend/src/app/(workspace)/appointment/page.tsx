@@ -89,7 +89,7 @@ const AppointmentPage: React.FC = () => {
     autoTable(doc, {
       startY: 46,
       head: [
-        ["#", "Client Name", "Date & Time", "Phone", "Description", "Remark"],
+        ["#", "Client Name", "Date", "Phone", "Description", "Remark"],
       ],
       body: filteredData.map((appt, index) => [
         index + 1,
@@ -244,17 +244,17 @@ const AppointmentPage: React.FC = () => {
       <header className="page-header">
         <div>
           <h1>Appointment Management</h1>
-          <p>Showing upcoming appointments — past meetings are archived</p>
+          <p>Manage your legal consultations and client meetings</p>
         </div>
         <div className="header-actions">
           <button
             className="secondary-btn"
             onClick={() => router.push("/clientDetails")}
           >
-            View Clients
+            👤 View Clients
           </button>
           <button className="primary-btn" onClick={() => setOpenModal(true)}>
-            + Add Appointment
+            <span>+</span> Schedule New
           </button>
         </div>
       </header>
@@ -282,7 +282,7 @@ const AppointmentPage: React.FC = () => {
           onClick={handleDownloadPDF}
           disabled={!filteredData || filteredData.length === 0}
         >
-          ⬇ Download PDF
+          📄 Export Report (PDF)
         </button>
       </div>
 
@@ -291,26 +291,28 @@ const AppointmentPage: React.FC = () => {
           <table className="appointment-table">
             <thead>
               <tr>
-                <th>Client Name</th>
-                <th>Date</th>
-                <th>Contact Info</th>
-                <th>Description</th>
+                <th>Client Details</th>
+                <th>Appointment Date</th>
+                <th>Case Description</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredData?.map((appt) => (
                 <tr key={appt.id}>
-                  <td className="font-bold">{appt.client.name}</td>
                   <td>
-                    {new Date(appt.date).toLocaleString([], {
-                      dateStyle: "medium",
-                    })}
+                    <div className="font-bold">{appt.client.name}</div>
+                    <div className="contact-cell">
+                      <small>{appt.client.phone} • {appt.client.email}</small>
+                    </div>
                   </td>
                   <td>
-                    <div className="contact-cell">
-                      <span>{appt.client.phone}</span>
-                      <small>{appt.client.email}</small>
+                    <div style={{ fontWeight: 600 }}>
+                      {new Date(appt.date).toLocaleDateString("en-IN", {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
                     </div>
                   </td>
                   <td className="description-cell">
@@ -320,24 +322,27 @@ const AppointmentPage: React.FC = () => {
                     <div className="action-group">
                       <button
                         className="edit-btn"
+                        title="Edit Appointment"
                         onClick={() => {
                           setSelectedAppointment(appt);
                           setOpenEditModal(true);
                         }}
                       >
-                        Edit
+                        ✏️ Edit
                       </button>
                       <button
                         className="delete-btn"
+                        title="Delete Appointment"
                         onClick={() => handleDelete(appt.id)}
                       >
-                        Delete
+                        🗑️ Delete
                       </button>
                       <button
                         className="bill-btn"
+                        title="Generate Bill"
                         onClick={() => setBillAppointment(appt)}
                       >
-                        Generate Bill
+                        💰 Generate Bill
                       </button>
                     </div>
                   </td>
@@ -346,11 +351,13 @@ const AppointmentPage: React.FC = () => {
             </tbody>
           </table>
           {filteredData?.length === 0 && (
-            <p className="no-data">
-              {filterDate
-                ? `No appointments on ${new Date(filterDate).toLocaleDateString()}.`
-                : "No upcoming appointments scheduled."}
-            </p>
+            <div className="no-data">
+              <p>
+                {filterDate
+                  ? `No appointments found for ${new Date(filterDate).toLocaleDateString()}.`
+                  : "No upcoming appointments scheduled."}
+              </p>
+            </div>
           )}
         </div>
       </section>

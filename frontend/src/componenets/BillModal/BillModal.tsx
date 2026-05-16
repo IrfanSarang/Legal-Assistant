@@ -13,8 +13,8 @@ interface BillModalProps {
 type PaymentMode = "Cash" | "UPI" | "Cheque" | "Bank Transfer";
 
 const BillModal: React.FC<BillModalProps> = ({ appointment, onClose }) => {
-  const [firmName, setFirmName] = useState("Irfan Associates");
-  const [lawyerName, setLawyerName] = useState("Irfan Sarang");
+  const [firmName, setFirmName] = useState("");
+  const [lawyerName, setLawyerName] = useState("");
   const [amount, setAmount] = useState("");
   const [paymentMode, setPaymentMode] = useState<PaymentMode>("Cash");
   const [generating, setGenerating] = useState(false);
@@ -257,16 +257,24 @@ const BillModal: React.FC<BillModalProps> = ({ appointment, onClose }) => {
         <div className="bill-modal-body">
           {/* Client Info — read only */}
           <div className="bill-client-info">
-            <span className="bill-client-name">{appointment.client.name}</span>
-            <span className="bill-client-sub">
-              {appointment.client.phone} · {appointment.client.email}
-            </span>
-            <span className="bill-client-sub">
-              Appointment:{" "}
-              {new Date(appointment.date).toLocaleDateString("en-IN", {
-                dateStyle: "long",
-              })}
-            </span>
+            <div className="bill-info-row">
+              <span className="info-label">Client Name</span>
+              <span className="info-value">{appointment.client.name}</span>
+            </div>
+            <div className="bill-info-row">
+              <span className="info-label">Contact Details</span>
+              <span className="info-value">
+                {appointment.client.phone} · {appointment.client.email}
+              </span>
+            </div>
+            <div className="bill-info-row">
+              <span className="info-label">Appointment Schedule</span>
+              <span className="info-value">
+                {new Date(appointment.date).toLocaleDateString("en-IN", {
+                  dateStyle: "long",
+                })}
+              </span>
+            </div>
           </div>
 
           <div className="bill-divider" />

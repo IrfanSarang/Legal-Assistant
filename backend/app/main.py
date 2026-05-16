@@ -16,7 +16,6 @@ def create_app() -> FastAPI:
     origins = [
         "http://localhost:3000",  
         "http://192.168.0.101:3000",
-        "http://127.0.0.1:3000",
         # Add production frontend URLs here
     ]
 

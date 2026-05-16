@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.schemas.contract import QueryRequest, QueryResponse
 from app.rag.retriever import retrieve
-from app.llm.criminal_api import generate_response
+from app.llm.contract_call import generate_response
 
 router = APIRouter()
 
@@ -14,7 +14,9 @@ async def generate_answer(payload: QueryRequest):
         message = generate_response(payload.query, retriever)
         return QueryResponse(answer=message)
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
+        
 
 
 
