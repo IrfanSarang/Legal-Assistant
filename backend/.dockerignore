@@ -14,5 +14,4 @@ htmlcov
 .git
 .gitignore
 app.db
-data/
-vectorstore/
+

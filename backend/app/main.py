@@ -16,7 +16,7 @@ def create_app() -> FastAPI:
     origins = [
         "http://localhost:3000",  
         "http://192.168.0.101:3000",
-        # Add production frontend URLs here
+        "https://legal-assistant-sepia.vercel.app"
     ]
 
     app.add_middleware(

@@ -14,11 +14,6 @@ venv/
 *.db
 *.sqlite3
 
-# Vector Store (Generated)
-vectorstore/
-data/vector_store/
-data/model_cache/
-
 # IDE / OS
 .vscode/
-.DS_Store
+.DS_Store
