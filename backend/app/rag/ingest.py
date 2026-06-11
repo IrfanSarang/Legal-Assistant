@@ -1,30 +1,26 @@
+from dotenv import load_dotenv
 from app.rag.extractor import load_all
 from app.rag.splitter import splitter
 from app.rag.embedder import create_vector
-from dotenv import load_dotenv
 
 load_dotenv()
 
-print("\n")
-print("============================")
-print("Ingestion Process started....")
+if __name__ == "__main__":
+    print("\n============================")
+    print("Ingestion Process started....")
 
+    print("============================")
+    print("Loading the documents")
+    docs = load_all("data")
+    print(docs[0].page_content[:100])
 
-print("============================")
-print("Loading the documennts")
+    print("============================")
+    print("Producing Chunks...")
+    chunks = splitter(docs)
 
-docs = load_all("data")
-print(docs[0].page_content[:100])
+    print("============================")
+    print("Generating Embeddings and Storing...")
+    create_vector(chunks)
 
-print("============================")
-print("Producing Chunks...")
-chunks = splitter(docs)
-
-print("============================")
-print("Generating Embeddings and Storing...")
-
-create_vector(chunks)
-
-print("============================")
-print("Successfully Completed Ingestion Process!!")
-
+    print("============================")
+    print("Successfully Completed Ingestion Process!!")
