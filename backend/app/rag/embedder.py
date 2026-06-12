@@ -19,37 +19,37 @@ def get_embedder():
    return embedding_model
 
 
-def create_vector(chunks):
-   embedder = get_embedder()
+def create_vector(chunks, namespace=None):
+    embedder = get_embedder()
+    pc = Pinecone(api_key=PINECONE_API_KEY)
 
-   pc = Pinecone(api_key=PINECONE_API_KEY)
+    # Create index if it doesn't exist
+    existing = [i.name for i in pc.list_indexes()]
+    if PINECONE_INDEX_NAME not in existing:
+        pc.create_index(
+            name=PINECONE_INDEX_NAME,
+            dimension=384,
+            metric="cosine",
+            spec=ServerlessSpec(cloud="aws", region="us-east-1")
+        )
 
-   # Create index if it doesn't exist
-   existing = [i.name for i in pc.list_indexes()]
-   if PINECONE_INDEX_NAME not in existing:
-       pc.create_index(
-           name=PINECONE_INDEX_NAME,
-           dimension=384,
-           metric="cosine",
-           spec=ServerlessSpec(cloud="aws", region="us-east-1")
-       )
-       print(f"Created Pinecone index: {PINECONE_INDEX_NAME}")
-
-   vectorstore = PineconeVectorStore.from_documents(
-       documents=chunks,
-       embedding=embedder,
-       index_name=PINECONE_INDEX_NAME,
-       pinecone_api_key=PINECONE_API_KEY
-   )
-   print("Vectors uploaded to Pinecone successfully.")
-   return vectorstore
+    vectorstore = PineconeVectorStore.from_documents(
+        documents=chunks,
+        embedding=embedder,
+        index_name=PINECONE_INDEX_NAME,
+        pinecone_api_key=PINECONE_API_KEY,
+        namespace=namespace  # Added namespace
+    )
+    print(f"Vectors uploaded to namespace '{namespace}' successfully.")
+    return vectorstore
 
 
-def load_vectorstore():
-   embedder = get_embedder()
-   vectorstore = PineconeVectorStore(
-       index_name=PINECONE_INDEX_NAME,
-       embedding=embedder,
-       pinecone_api_key=PINECONE_API_KEY
-   )
-   return vectorstore
+def load_vectorstore(namespace=None):
+    embedder = get_embedder()
+    vectorstore = PineconeVectorStore(
+        index_name=PINECONE_INDEX_NAME,
+        embedding=embedder,
+        pinecone_api_key=PINECONE_API_KEY,
+        namespace=namespace  # Added namespace
+    )
+    return vectorstore

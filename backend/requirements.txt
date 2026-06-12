@@ -5,19 +5,17 @@ pydantic
 email-validator
 pypdf
 sentence_transformers
-faiss-cpu
-openai
 requests
 python-docx
 numpy
 pymupdf
-
 langchain
 langchain_core
 langchain_community
 langchain_google_genai
-langchain_chroma
-chromadb
 langchain_huggingface
+langchain-pinecone
+pinecone
+python-dotenv
 
 

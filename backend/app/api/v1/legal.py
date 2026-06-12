@@ -5,7 +5,7 @@ from app.llm.criminal_api import generate_response
 
 router = APIRouter()
 
-retriever = retrieve(category="criminal")
+retriever = retrieve(namespace="criminal")
 
 @router.post('/query', response_model=QueryResponse)
 async def generate_answer(payload: QueryRequest):

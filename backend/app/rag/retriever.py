@@ -1,19 +1,17 @@
 from app.rag.embedder import load_vectorstore
 
-def retrieve(category=None, filename=None):
+def retrieve(namespace=None, filename=None):
     """
     Retrieves a retriever object from the Pinecone vectorstore
-    with optional filtering.
+    using specific namespace isolation.
     """
-    vectorstore = load_vectorstore()
+    # Load the vectorstore with the specific namespace
+    vectorstore = load_vectorstore(namespace=namespace)
 
-    # Define search arguments based on provided filters
     search_kwargs = {"k": 5}
     
-    if category:
-        print(f"Applying filter: {{'category': '{category}'}}")
-        search_kwargs["filter"] = {"category": category}
-    elif filename:
+    # Optional: Keep filename filtering if you need sub-document precision
+    if filename:
         search_kwargs["filter"] = {"filename": filename}
 
     return vectorstore.as_retriever(search_kwargs=search_kwargs)

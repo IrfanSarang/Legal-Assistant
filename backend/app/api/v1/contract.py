@@ -5,13 +5,14 @@ from app.llm.contract_call import generate_response
 
 router = APIRouter()
 
-retriever = retrieve(category="contract")
+retriever = retrieve(namespace= "contract")
 
 @router.post('/analyse', response_model=QueryResponse)
 async def generate_answer(payload: QueryRequest):
     try:
         
         message = generate_response(payload.query, retriever)
+        
         return QueryResponse(answer=message)
     except Exception as e:
         print(e)
