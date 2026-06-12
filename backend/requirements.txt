@@ -9,5 +9,7 @@ langchain_core
 langchain_community
 langchain_huggingface
 langchain-pinecone
+langchain_google_genai
 pinecone
 pymupdf
+docx2txt
