@@ -1,3 +1,0 @@
-# Disable LFS for PDFs — we don't need them on HF
-*.pdf -text -diff -merge
-data/**  -filter -diff -merge
